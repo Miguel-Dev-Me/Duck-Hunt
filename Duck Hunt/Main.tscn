@@ -1,0 +1,134 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://chao.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Material Duck Hunt/cenariotras.png" type="Texture" id=2]
+[ext_resource path="res://Material Duck Hunt/cenariofrente.png" type="Texture" id=3]
+[ext_resource path="res://Alvo.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Main.gd" type="Script" id=5]
+[ext_resource path="res://topo.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Material Duck Hunt/cao/captura.png" type="Texture" id=7]
+[ext_resource path="res://Material Duck Hunt/cao/rindo.png" type="Texture" id=8]
+[ext_resource path="res://Material Duck Hunt/PressStart2P.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://Material Duck Hunt/hud.png" type="Texture" id=10]
+[ext_resource path="res://Material Duck Hunt/sons/flyaway.wav" type="AudioStream" id=11]
+[ext_resource path="res://Material Duck Hunt/sons/round.wav" type="AudioStream" id=12]
+[ext_resource path="res://Material Duck Hunt/sons/cao_rindo.wav" type="AudioStream" id=13]
+[ext_resource path="res://Material Duck Hunt/sons/cao_captura.wav" type="AudioStream" id=14]
+[ext_resource path="res://Material Duck Hunt/sons/colidiu.wav" type="AudioStream" id=15]
+
+[sub_resource type="Animation" id=1]
+resource_name = "captura"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("captura:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.2, 3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 389.553, 551.362 ), Vector2( 391.164, 421.195 ), Vector2( 389, 540 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "rindo"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("rindo:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.2, 3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 389, 537.788 ), Vector2( 389, 417.146 ), Vector2( 389, 540.963 ) ]
+}
+
+[sub_resource type="DynamicFont" id=3]
+size = 19
+font_data = ExtResource( 9 )
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="Sprite" type="Sprite" parent="."]
+z_index = -3
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Sprite2" type="Sprite" parent="."]
+position = Vector2( 0.667419, 0 )
+z_index = 1
+texture = ExtResource( 3 )
+centered = false
+
+[node name="Alvo" parent="." instance=ExtResource( 4 )]
+
+[node name="gerapato" type="Timer" parent="."]
+one_shot = true
+
+[node name="espera" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+
+[node name="topo" parent="." instance=ExtResource( 6 )]
+position = Vector2( 381.767, -72.3171 )
+
+[node name="chao" parent="." instance=ExtResource( 1 )]
+position = Vector2( 380.57, 782.116 )
+
+[node name="captura" type="Sprite" parent="."]
+position = Vector2( 389.553, 551.362 )
+texture = ExtResource( 7 )
+
+[node name="rindo" type="Sprite" parent="."]
+position = Vector2( 389, 537.788 )
+texture = ExtResource( 8 )
+
+[node name="cao" type="AnimationPlayer" parent="."]
+anims/captura = SubResource( 1 )
+anims/rindo = SubResource( 2 )
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Sprite" type="Sprite" parent="HUD"]
+position = Vector2( 390.764, 632.396 )
+texture = ExtResource( 10 )
+
+[node name="Label" type="Label" parent="HUD"]
+margin_left = 363.268
+margin_top = 620.841
+margin_right = 420.268
+margin_bottom = 661.841
+custom_fonts/font = SubResource( 3 )
+text = "000
+"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cao_captura" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 14 )
+
+[node name="cao_rindo" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 13 )
+
+[node name="colidiu" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 15 )
+
+[node name="flyaway" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 11 )
+
+[node name="round" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 12 )
+
+[connection signal="timeout" from="gerapato" to="." method="_on_gerapato_timeout"]
+[connection signal="timeout" from="espera" to="." method="_on_espera_timeout"]
+[connection signal="body_entered" from="topo" to="." method="_on_topo_body_entered"]
+[connection signal="body_entered" from="chao" to="." method="_on_chao_body_entered"]

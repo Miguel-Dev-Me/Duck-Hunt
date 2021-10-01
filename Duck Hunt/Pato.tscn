@@ -1,0 +1,74 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://Material Duck Hunt/pato/cima/sprite_0.png" type="Texture" id=1]
+[ext_resource path="res://Material Duck Hunt/pato/cima/sprite_2.png" type="Texture" id=2]
+[ext_resource path="res://Material Duck Hunt/pato/lado/sprite_1.png" type="Texture" id=3]
+[ext_resource path="res://Material Duck Hunt/pato/morte/0.png" type="Texture" id=4]
+[ext_resource path="res://Material Duck Hunt/pato/morte/1.png" type="Texture" id=5]
+[ext_resource path="res://Material Duck Hunt/pato/morte/2.png" type="Texture" id=6]
+[ext_resource path="res://Material Duck Hunt/pato/lado/sprite_2.png" type="Texture" id=7]
+[ext_resource path="res://Material Duck Hunt/pato/morte/3.png" type="Texture" id=8]
+[ext_resource path="res://Material Duck Hunt/pato/susto.png" type="Texture" id=9]
+[ext_resource path="res://Material Duck Hunt/pato/cima/sprite_1.png" type="Texture" id=10]
+[ext_resource path="res://Material Duck Hunt/pato/lado/sprite_0.png" type="Texture" id=11]
+[ext_resource path="res://Pato.gd" type="Script" id=12]
+[ext_resource path="res://Material Duck Hunt/sons/pato.wav" type="AudioStream" id=13]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 11 ), ExtResource( 3 ), ExtResource( 7 ) ],
+"loop": true,
+"name": "lado",
+"speed": 7.0
+}, {
+"frames": [ ExtResource( 9 ) ],
+"loop": true,
+"name": "susto",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "morte",
+"speed": 7.0
+}, {
+"frames": [ ExtResource( 1 ), ExtResource( 10 ), ExtResource( 2 ) ],
+"loop": true,
+"name": "cima",
+"speed": 7.0
+} ]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 45.7561
+
+[node name="Pato" type="KinematicBody2D"]
+scale = Vector2( 0.8, 0.8 )
+script = ExtResource( 12 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 1 )
+animation = "cima"
+frame = 2
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
+
+[node name="movimento" type="Timer" parent="."]
+autostart = true
+
+[node name="anima" type="Timer" parent="."]
+autostart = true
+
+[node name="morte" type="Timer" parent="."]
+wait_time = 0.2
+
+[node name="audio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 13 )
+
+[node name="quack" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="movimento" to="." method="_on_movimento_timeout"]
+[connection signal="timeout" from="anima" to="." method="_on_anima_timeout"]
+[connection signal="timeout" from="morte" to="." method="_on_morte_timeout"]
+[connection signal="timeout" from="quack" to="." method="_on_quack_timeout"]
